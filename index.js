@@ -22,9 +22,20 @@ app.get("/", function (req, res) {
 // your first API endpoint... 
 app.get("/api/timestamp/:ts", function (req, res) {
   let ts = req.params.ts;
-  
+  if(ts.match(/-/g)){
+    ts=+ts;
+  }
+  let date = new Date(ts);
+  if(DataTransfer.toUTCString() == "Invalid Date"){
+    res.json({error:date.toUTCString()});
+  }
+  res.json({unix:date.valueOf(),utc:date.toGMTString()});
 });
 
+app.get("/api/timestamp/",(req,res)=>{
+  let date = new Date();
+  res.json({unix:date.valueOf(),utc: date.toUTCString() });
+})
 
 
 // listen for requests :)
